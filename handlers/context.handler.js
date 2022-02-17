@@ -2,7 +2,6 @@
  *
  * @param {User} user
  * @param {string} message
- * @returns {"invalid_username" | "set_username" | "change_username" | "accept_invite" | "decline_invite" | "inform_about_invite" | "create_group" | "ask_for_group_members" | "status" | "sum_up" | "add_bill"  | "unknown_command"}
  */
 function getContext(user, message) {
   if (user.username === null) {

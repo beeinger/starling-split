@@ -4,7 +4,7 @@
 //     "4485460018168025": 50.42,
 //     "4997699950244511": 0,
 //   };
-const { round } = require("./utils");
+const { round } = require(".");
 
 it("rounds correctly", () => {
   expect(round(1.23456789)).toBe(1.24);

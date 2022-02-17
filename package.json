@@ -2,6 +2,7 @@
   "scripts": {
     "dev": "nodemon start.js",
     "deploy": "deta update -e .env && deta deploy",
+    "deta-login": "deta login",
     "test": "jest"
   },
   "dependencies": {
