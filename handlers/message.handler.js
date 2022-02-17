@@ -21,10 +21,7 @@ async function handleMessage(entry) {
     return;
   }
 
-  console.log(user);
-
   const action = getContext(user, message);
-  console.log(action);
   switch (action) {
     case "invalid_username":
       await sendMessage(
@@ -40,7 +37,6 @@ async function handleMessage(entry) {
           user.key
         );
       } catch (err) {
-        console.log(err);
         await sendMessage(
           "User with that username already exists :c,\u000Aplease respond with a different Starling username!",
           user.key
@@ -110,7 +106,6 @@ async function handleMessage(entry) {
         memberKeys.push(memberKey);
       }
       if (!error) {
-        console.log(memberKeys);
         await user.addGroupMembers(memberKeys);
 
         for (const memberKey of memberKeys) {
