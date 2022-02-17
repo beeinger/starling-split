@@ -1,9 +1,18 @@
-const app = require("fastify")(),
-  handleMessage = require("./messageHandler");
+const User = require("./classes/User");
+const app = require("fastify")();
+const handleMessage = require("./handlers/message.handler");
 
 require("dotenv").config();
 
-app.get("/", async () => "Hi, I'm running!");
+app.get("/", async () => {
+  const userCount = await User.getUserCount();
+
+  return (
+    "Hi, the bot is running!\u000ACurrently there are " +
+    userCount +
+    " users using this bot."
+  );
+});
 
 app.post("/webhook", async (req, res) => {
   let body = req.body;
@@ -31,7 +40,7 @@ app.post("/webhook", async (req, res) => {
 // Adds support for GET requests to our webhook
 app.get("/webhook", (req, res) => {
   // Your verify token. Should be a random string.
-  let VERIFY_TOKEN = "***** ***";
+  let VERIFY_TOKEN = process.env.VERIFY_TOKEN;
 
   // Parse the query params
   let mode = req.query["hub.mode"];

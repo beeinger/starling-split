@@ -34,70 +34,23 @@ async function sendNotification(message, userId) {
   );
 }
 
-function getNetto(members, _round) {
-  const money = Object.values(members);
-  const med = money.reduce((a, b) => a + b) / money.length;
-  let membersNet = {};
-  for (let a of Object.keys(members)) {
-    membersNet[a] = _round ? round(med - members[a]) : med - members[a];
-  }
-  return membersNet;
-}
-
+/**
+ * Rounds a number to 2 decimal places
+ *
+ * @param {number} num
+ * @returns {number}
+ */
 function round(num) {
-  const isNegative = num < 0;
-  const abs = Math.abs(num);
-  const rounded = (Math.ceil(abs * 100) / 100).toFixed(2);
+  const isNegative = num < 0,
+    abs = Math.abs(num),
+    rounded = (Math.ceil(abs * 100) / 100).toFixed(2),
+    result = Number(isNegative ? "-" + rounded : rounded);
 
-  return isNegative ? "-" + rounded : rounded;
-}
-
-function sumUp(members) {
-  const membersNet = getNetto(members);
-  console.log(membersNet);
-
-  let creditors = [],
-    debtors = [];
-
-  Object.keys(membersNet).forEach((a) =>
-    membersNet[a] < 0
-      ? creditors.push([a, membersNet[a]])
-      : membersNet[a] > 0 && debtors.push([a, membersNet[a]])
-  );
-  let transactions = [];
-
-  debtors.forEach((debtor) => {
-    while (debtor[1] !== 0) {
-      let transaction = null;
-
-      if (debtor[1] >= -creditors[0][1]) {
-        transaction = {
-          from: debtor[0],
-          to: creditors[0][0],
-          amount: round(-creditors[0][1]),
-        };
-        debtor[1] += creditors[0][1];
-        creditors.shift();
-      } else {
-        transaction = {
-          from: debtor[0],
-          to: creditors[0][0],
-          amount: round(debtor[1]),
-        };
-        creditors[0][1] -= debtor[1];
-        debtor[1] = 0;
-      }
-
-      transactions.push(transaction);
-    }
-  });
-
-  return transactions;
+  return result;
 }
 
 module.exports = {
-  sumUp,
-  getNetto,
+  round,
   sendMessage,
   sendNotification,
 };
