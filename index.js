@@ -1,16 +1,23 @@
 const User = require("./classes/User");
 const app = require("fastify")();
 const handleMessage = require("./handlers/message.handler");
+const privacyPolicy = require("./utils/privacyPolicy");
 
 require("dotenv").config();
 
-app.get("/", async () => {
+app.get("/privacy-policy", async (req, res) => {
+  res.type("text/html");
+  res.send(privacyPolicy);
+});
+
+app.get("/", async (req, res) => {
   const userCount = await User.getUserCount();
 
-  return (
-    "Hi, the bot is running!\u000ACurrently there are " +
-    userCount +
-    " users using this bot."
+  res.type("text/html");
+  res.send(
+    "<h2>Hi, the bot is running!\u000ACurrently there are " +
+      userCount +
+      " users using this bot.</h2><a href='/privacy-policy'>Privacy Policy</a>"
   );
 });
 

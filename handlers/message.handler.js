@@ -142,8 +142,6 @@ async function handleMessage(entry) {
 
       await Promise.all(
         transactions.map(async (transaction) => {
-          const link = `https://settleup.starlingbank.com/${transaction.to}?amount=${transaction.amount}&message=Starling%20Split%20Bot`;
-
           if (!notified.includes(transaction.from)) {
             await sendNotification(
               `Hi, *${user.username}* has requested a sum up!`,
@@ -152,7 +150,8 @@ async function handleMessage(entry) {
             notified.push(transaction.from);
           }
 
-          const to = await User.getUsername(transaction.to);
+          const to = await User.getUsername(transaction.to),
+            link = `https://settleup.starlingbank.com/${to}?amount=${transaction.amount}&message=Starling%20Split%20Bot`;
           await sendNotification(
             `You need to pay\u000A${transaction.amount} to *${to}*\u000A${link}`,
             transaction.from
