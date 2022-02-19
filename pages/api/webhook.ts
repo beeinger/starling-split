@@ -26,6 +26,7 @@ const webhook = async (req: NextApiRequest, res: NextApiResponse) => {
   } else if (req.method === "GET") {
     // Your verify token. Should be a random string.
     let VERIFY_TOKEN = process.env.VERIFY_TOKEN;
+    console.log(VERIFY_TOKEN);
 
     // Parse the query params
     let mode = req.query["hub.mode"],
@@ -44,7 +45,7 @@ const webhook = async (req: NextApiRequest, res: NextApiResponse) => {
 
     console.log("WEBHOOK_NOT_VERIFIED");
     // Responds with '403 Forbidden' if verify tokens do not match
-    return res.status(403).send("WEBHOOK_NOT_VERIFIED");
+    return res.status(500).send("WEBHOOK_NOT_VERIFIED");
   } else return res.status(404).send("NOT_FOUND");
 };
 
