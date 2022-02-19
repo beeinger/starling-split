@@ -1,5 +1,6 @@
 import React from "react";
 import Head from "next/head";
+import Link from "next/link";
 
 export default function PrivacyPolicy() {
   return (
@@ -7,6 +8,9 @@ export default function PrivacyPolicy() {
       <Head>
         <title>Privacy Policy of Starling Split Messenger bot</title>
       </Head>
+      <Link href="/">
+        <a style={{ marginBottom: "32px", display: "block" }}>Home</a>
+      </Link>
       <h1>Privacy Policy</h1>
       <p>Last updated: February 17, 2022</p>
       <p>
