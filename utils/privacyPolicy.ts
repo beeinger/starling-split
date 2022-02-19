@@ -139,4 +139,4 @@ const privacyPolicy = `
 </html>
 `;
 
-module.exports = privacyPolicy;
+export default privacyPolicy;

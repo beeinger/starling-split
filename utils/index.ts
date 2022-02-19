@@ -1,9 +1,8 @@
-const { default: axios } = require("axios");
-require("dotenv").config();
+import axios from "axios";
 
 const token = process.env.FACEBOOK_PAGE_TOKEN;
 
-async function sendMessage(message, userId) {
+async function sendMessage(message: string, userId: string) {
   return await axios.post(
     "https://graph.facebook.com/v12.0/me/messages?access_token=" + token,
     {
@@ -18,7 +17,7 @@ async function sendMessage(message, userId) {
   );
 }
 
-async function sendNotification(message, userId) {
+async function sendNotification(message: string, userId: string) {
   return await axios.post(
     "https://graph.facebook.com/v12.0/me/messages?access_token=" + token,
     {
@@ -40,7 +39,7 @@ async function sendNotification(message, userId) {
  * @param {number} num
  * @returns {number}
  */
-function round(num) {
+function round(num: number) {
   const isNegative = num < 0,
     abs = Math.abs(num),
     rounded = (Math.ceil(abs * 100) / 100).toFixed(2),
@@ -49,8 +48,8 @@ function round(num) {
   return result;
 }
 
-module.exports = {
-  round,
-  sendMessage,
-  sendNotification,
-};
+function sOrNoS(num: number | string) {
+  return typeof num === "number" && num > 1 ? "s" : "";
+}
+
+export { round, sendMessage, sendNotification, sOrNoS };

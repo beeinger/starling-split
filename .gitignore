@@ -1,3 +1,4 @@
 .env
 node_modules
-.deta
+.next
+tsconfig.tsbuildinfo

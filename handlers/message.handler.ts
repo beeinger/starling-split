@@ -1,24 +1,30 @@
-const User = require("../classes/User");
-const { sendMessage, sendNotification } = require("../utils");
-const getContext = require("./context.handler");
+import { sendMessage, sendNotification } from "utils";
 
-async function handleMessage(entry) {
+import User from "classes/User";
+import getContext from "handlers/context.handler";
+
+export default async function handleMessage(entry: {
+  messaging: { sender: { id: string }; message: { text: string } }[];
+}) {
   const webhook_event = entry.messaging[0],
     facebookId = webhook_event.sender.id,
     message = webhook_event.message.text;
 
   let user = await new User(facebookId);
-  if (user === null) {
-    user = await User.initialize(facebookId);
-    if (user === null)
+
+  try {
+    await user.login();
+  } catch (err) {
+    try {
+      await User.createUser(facebookId);
+    } catch (err) {
       return await sendMessage("Something went wrong :c", facebookId);
-    else {
-      await sendMessage(
-        "Welcome!\u000A\u000AFirst you need to give me your Starling username,\u000Aplease respond to this message with your Starling username!",
-        facebookId
-      );
     }
-    return;
+
+    return await sendMessage(
+      "Welcome!\u000A\u000AFirst you need to give me your Starling username,\u000Aplease respond to this message with your Starling username!",
+      facebookId
+    );
   }
 
   const action = getContext(user, message);
@@ -53,20 +59,22 @@ async function handleMessage(entry) {
     case "accept_invite":
       await user.acceptJoin();
       await sendMessage(
-        `Accepted the invite to join group ${user.group.name}!`,
+        `Accepted the invite to join group ${user.group!.name}!`,
         user.key
       );
       break;
     case "decline_invite":
       await user.declineJoin();
       await sendMessage(
-        `Declined the invite to join group ${user.group.name}.`,
+        `Declined the invite to join group ${user.group!.name}.`,
         user.key
       );
       break;
     case "inform_about_invite":
       await sendMessage(
-        `You have an invite to join group ${user.join.name},\u000Ado you want to join? (Yes/No)`,
+        `You have an invite to join group ${
+          user.join!.name
+        },\u000Ado you want to join? (Yes/No)`,
         user.key
       );
       break;
@@ -111,7 +119,9 @@ async function handleMessage(entry) {
         for (const memberKey of memberKeys) {
           if (memberKey !== user.key) {
             await sendNotification(
-              `You have an invite to join group ${user.group.name},\u000Ado you want to join? (Yes/No)`,
+              `You have an invite to join group ${
+                user.group!.name
+              },\u000Ado you want to join? (Yes/No)`,
               memberKey
             );
           }
@@ -125,7 +135,7 @@ async function handleMessage(entry) {
       break;
     }
     case "status": {
-      const status = await user.group.getStatus();
+      const status = await user.group!.getStatus();
 
       await sendMessage(
         "It looks like this:\u000A\u000A" + status.join("\u000A"),
@@ -134,11 +144,11 @@ async function handleMessage(entry) {
       break;
     }
     case "sum_up": {
-      const transactions = await user.group.sumUp();
+      const transactions = await user.group!.sumUp();
 
       await sendMessage("You have requested a sum up!", user.key);
 
-      let notified = [];
+      let notified: string[] = [];
 
       await Promise.all(
         transactions.map(async (transaction) => {
@@ -165,18 +175,18 @@ async function handleMessage(entry) {
       const _query = message
         .match(
           /https:\/\/settleup\.starlingbank\.com\/\S*\?amount=\S*(&message=\S*)?/
-        )[0]
+        )![0]
         .split("?")[1]
         .split("&");
 
-      let query = {};
+      let query: { [part: string]: string } = {};
 
-      for (const string of _query) {
-        const parts = string.split("=");
+      for (const entry of _query) {
+        const parts = entry.split("=");
         query[parts[0]] = parts[1];
       }
 
-      if (!isNaN(query.amount)) await user.addBill(query.amount);
+      if (!isNaN(Number(query.amount))) await user.addBill(query.amount);
       else await sendMessage("Invalid starling link!", user.key);
 
       break;
@@ -192,5 +202,3 @@ async function handleMessage(entry) {
       );
   }
 }
-
-module.exports = handleMessage;

@@ -1,9 +1,6 @@
-/**
- *
- * @param {User} user
- * @param {string} message
- */
-function getContext(user, message) {
+import User from "classes/User";
+
+export default function getContext(user: User, message: string) {
   if (user.username === null) {
     if (!/^\S*$/.test(message)) return "invalid_username";
     else return "set_username";
@@ -32,5 +29,3 @@ function getContext(user, message) {
 
   return "unknown_command";
 }
-
-module.exports = getContext;
