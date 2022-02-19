@@ -26,7 +26,7 @@ const webhook = async (req: NextApiRequest, res: NextApiResponse) => {
   } else if (req.method === "GET") {
     // Your verify token. Should be a random string.
     let VERIFY_TOKEN = process.env.VERIFY_TOKEN;
-    console.log(VERIFY_TOKEN);
+    console.log(VERIFY_TOKEN, req.query["hub.verify_token"], req.body);
 
     // Parse the query params
     let mode = req.query["hub.mode"],
