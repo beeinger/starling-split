@@ -3,7 +3,8 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "test": "jest"
+    "test": "jest",
+    "lint": "next lint"
   },
   "dependencies": {
     "axios": "^0.26.0",
@@ -15,6 +16,7 @@
   "devDependencies": {
     "@types/react": "^17.0.39",
     "eslint": "^8.9.0",
+    "eslint-config-next": "12.1.0",
     "jest": "^27.5.1",
     "typescript": "^4.5.5"
   }

@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 import handleMessage from "handlers/message.handler";
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const webhook = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "POST") {
     let body = req.body;
     try {
@@ -47,3 +47,5 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(403).send("WEBHOOK_NOT_VERIFIED");
   } else res.status(404).send("NOT_FOUND");
 };
+
+export default webhook;

@@ -3,7 +3,7 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { sOrNoS } from "utils";
 
-export default function index() {
+export default function Index() {
   const [stats, setStats] = useState({ nbOfUsers: "-", nbOfGroups: "-" }),
     { nbOfUsers, nbOfGroups } = stats;
 
