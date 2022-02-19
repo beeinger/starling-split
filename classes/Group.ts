@@ -93,7 +93,7 @@ export default class Group {
 
     const status = await Promise.all(
       Object.keys(nettoMembers).map(async (userKey) => {
-        const username = User.getUsername(userKey);
+        const username = await User.getUsername(userKey);
         return `*${username}* is ${nettoMembers[userKey]}`;
       })
     );
