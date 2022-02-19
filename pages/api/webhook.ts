@@ -42,12 +42,12 @@ const webhook = async (req: NextApiRequest, res: NextApiResponse) => {
         // Responds with the challenge token from the request
         console.log("WEBHOOK_VERIFIED");
         return res.status(200).send(challenge);
+      } else {
+        // Responds with '403 Forbidden' if verify tokens do not match
+        console.log("WEBHOOK_NOT_VERIFIED");
+        return res.status(403).send("WEBHOOK_NOT_VERIFIED");
       }
     }
-
-    console.log("WEBHOOK_NOT_VERIFIED");
-    // Responds with '403 Forbidden' if verify tokens do not match
-    return res.status(403).send("WEBHOOK_NOT_VERIFIED");
   } else return res.status(404).send("NOT_FOUND");
 };
 
