@@ -3,6 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import handleMessage from "handlers/message.handler";
 
 const webhook = async (req: NextApiRequest, res: NextApiResponse) => {
+  console.log(req);
   if (req.method === "POST") {
     let body = req.body;
     try {
@@ -26,12 +27,13 @@ const webhook = async (req: NextApiRequest, res: NextApiResponse) => {
   } else if (req.method === "GET") {
     // Your verify token. Should be a random string.
     let VERIFY_TOKEN = process.env.VERIFY_TOKEN;
-    console.log(VERIFY_TOKEN, req.query["hub.verify_token"], req.body);
 
     // Parse the query params
     let mode = req.query["hub.mode"],
       token = req.query["hub.verify_token"],
       challenge = req.query["hub.challenge"];
+
+    console.log(VERIFY_TOKEN, mode, token, challenge, req.body);
 
     // Checks if a token and mode is in the query string of the request
     if (mode && token) {
@@ -45,7 +47,7 @@ const webhook = async (req: NextApiRequest, res: NextApiResponse) => {
 
     console.log("WEBHOOK_NOT_VERIFIED");
     // Responds with '403 Forbidden' if verify tokens do not match
-    return res.status(500).send("WEBHOOK_NOT_VERIFIED");
+    return res.status(403).send("WEBHOOK_NOT_VERIFIED");
   } else return res.status(404).send("NOT_FOUND");
 };
 
