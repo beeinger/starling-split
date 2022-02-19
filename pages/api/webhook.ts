@@ -3,7 +3,6 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import handleMessage from "handlers/message.handler";
 
 const webhook = async (req: NextApiRequest, res: NextApiResponse) => {
-  console.log(req);
   if (req.method === "POST") {
     let body = req.body;
     try {

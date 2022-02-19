@@ -1,5 +1,6 @@
 import { Deta } from "deta";
 import { round } from "utils";
+import User from "./User";
 
 const deta = Deta(process.env.DETA_PROJECT_KEY),
   groups = deta.Base("groups");
@@ -92,7 +93,7 @@ export default class Group {
 
     const status = await Promise.all(
       Object.keys(nettoMembers).map(async (userKey) => {
-        const username = await require("./User").getUsername(userKey);
+        const username = User.getUsername(userKey);
         return `*${username}* is ${nettoMembers[userKey]}`;
       })
     );
