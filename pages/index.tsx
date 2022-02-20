@@ -51,7 +51,7 @@ export default function Index() {
         }}
       >
         Note: This is an MVP version, styling of this page and more
-        functionalities of the bot will come in the future. To the progress go{" "}
+        functionalities of the bot will come in the future. For the progress go{" "}
         <Link href="https://github.com/beeinger/starling-split/tree/master#readme">
           here
         </Link>
